@@ -430,7 +430,7 @@
 				on:touchstart={() => (tones[t].playing = true)}
 				on:touchend={() => (tones[t].playing = false)}
 			>
-				{tones[t].name}{tones[t].octave}
+				<span style="user-select: none;">{tones[t].name}{tones[t].octave}</span>
 			</button>
 		{/each}
 	</div>
