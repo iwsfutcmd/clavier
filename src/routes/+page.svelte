@@ -3,7 +3,7 @@
 	let context: AudioContext;
 	const C4 = 264.0;
 	const C0 = C4 / 2 ** 4;
-	const MAXGAIN = 1.35;
+	const MAXGAIN = 1;
 	const width = 512;
 	const height = 256;
 	const stringWidth = 1024;
