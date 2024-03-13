@@ -427,9 +427,11 @@
 	<div>
 		{#each Object.values(tonesTemperment) as t}
 			<button
-				on:mousedown={() => (tones[t].playing = true)}
-				on:mouseup={() => (tones[t].playing = false)}>{tones[t].name}{tones[t].octave}</button
+				on:touchstart={() => (tones[t].playing = true)}
+				on:touchend={() => (tones[t].playing = false)}
 			>
+				{tones[t].name}{tones[t].octave}
+			</button>
 		{/each}
 	</div>
 	<!-- <div class="tone-grid">
