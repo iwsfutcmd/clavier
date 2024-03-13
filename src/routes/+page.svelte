@@ -424,14 +424,17 @@
 			{/each}
 		</div>
 	</div>
-	<div>
+	<div class="tone-button-container">
 		{#each Object.values(tonesTemperment) as t}
-			<button
+			{@const name = tones[t].name + tones[t].octave}
+			<input type="checkbox" bind:checked={tones[t].playing} />
+			<div class="tone-button">{name}</div>
+			<!-- <button
 				on:touchstart={() => (tones[t].playing = true)}
 				on:touchend={() => (tones[t].playing = false)}
 			>
 				<span style="user-select: none;">{tones[t].name}{tones[t].octave}</span>
-			</button>
+			</button> -->
 		{/each}
 	</div>
 	<!-- <div class="tone-grid">
@@ -469,7 +472,26 @@
 		display: grid;
 		grid-template-rows: repeat(12, 1fr);
 	}
-	button {
+
+	.tone-button-container {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+	}
+	.tone-button {
 		font-family: 'Noto Sans', 'Noto Music';
+		inline-size: 36px;
+		block-size: 36px;
+		background-color: lightblue;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	input[type='checkbox'] {
+		display: none;
+	}
+
+	input[type='checkbox']:checked + .tone-button {
+		background-color: pink;
 	}
 </style>
