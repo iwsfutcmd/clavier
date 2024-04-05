@@ -298,10 +298,10 @@
 		const gain = MAXGAIN / tones.filter((t) => t.playing).length;
 		playingTones = tones
 			.map((t) => {
-				t.g.gain.setTargetAtTime(t.playing ? gain : 0, context.currentTime, 0.05);
-				if (t.playing) return t;
+				t.g.gain.setTargetAtTime(t.playing ? gain : 0, context.currentTime, 0.01);
+				return t;
 			})
-			.filter((f) => f);
+			.filter((t) => t.playing);
 		context?.resume();
 	}
 	$: {
@@ -321,12 +321,7 @@
 			persian: makeTonesPersian(context, analyser),
 			chinese: makeTonesChinese(context, analyser)
 		};
-		// tonesJust = makeTonesJust(context, analyser);
-		// tonesEqual = makeTonesEqual(context, analyser);
-		// tonesPersian = makeTonesPersian(context, analyser);
 		tonesTemperment = temperments[selectedTemperment];
-		window.keyMap = keyMap;
-		window.tonesTemperment = tonesTemperment;
 		handleKeydown = (e: KeyboardEvent) => {
 			e.preventDefault();
 			if (!keyPressed[e.code]) {
