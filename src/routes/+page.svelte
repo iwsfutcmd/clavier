@@ -3,7 +3,7 @@
 	let context: AudioContext;
 	const C4 = 264.0;
 	const C0 = C4 / 2 ** 4;
-	const MAXGAIN = 1;
+	const MAX_GAIN = 1;
 	const width = 512;
 	const height = 256;
 	const stringWidth = 1024;
@@ -281,21 +281,21 @@
 		);
 	let selectedMode = 'major';
 	let keyMap: { [key: string]: string };
-	let selectedTemperment = 'persian';
-	let temperments: { [key: string]: { [key: string]: number } } = {
+	let selectedTemperament = 'persian';
+	let temperaments: { [key: string]: { [key: string]: number } } = {
 		just: {},
 		equal: {},
 		persian: {},
 		chinese: {}
 	};
-	let tonesTemperment: { [key: string]: number } = {};
+	let tonesTemperament: { [key: string]: number } = {};
 	let keyPressed: { [key: string]: boolean } = {};
 	let handleKeydown = (e: KeyboardEvent) => {};
 	let handleKeyup = (e: KeyboardEvent) => {};
 
 	let playingTones: Tone[] = [];
 	$: {
-		const gain = MAXGAIN / tones.filter((t) => t.playing).length;
+		const gain = MAX_GAIN / tones.filter((t) => t.playing).length;
 		playingTones = tones
 			.map((t) => {
 				t.g.gain.setTargetAtTime(t.playing ? gain : 0, context.currentTime, 0.01);
@@ -308,26 +308,26 @@
 		keyMap = makeKeyMapFromRows(modes[selectedMode], 3);
 	}
 	$: {
-		tonesTemperment = temperments[selectedTemperment];
+		tonesTemperament = temperaments[selectedTemperament];
 	}
 
 	onMount(() => {
 		context = new AudioContext();
 		analyser = context.createAnalyser();
 		analyser.connect(context.destination);
-		temperments = {
+		temperaments = {
 			just: makeTonesJust(context, analyser),
 			equal: makeTonesEqual(context, analyser),
 			persian: makeTonesPersian(context, analyser),
 			chinese: makeTonesChinese(context, analyser)
 		};
-		tonesTemperment = temperments[selectedTemperment];
+		tonesTemperament = temperaments[selectedTemperament];
 		handleKeydown = (e: KeyboardEvent) => {
 			e.preventDefault();
 			if (!keyPressed[e.code]) {
 				keyPressed[e.code] = true;
 				if (e.code && keyMap[e.code]) {
-					tones[tonesTemperment[keyMap[e.code]]].playing = true;
+					tones[tonesTemperament[keyMap[e.code]]].playing = true;
 				}
 			}
 		};
@@ -335,7 +335,7 @@
 			e.preventDefault();
 			keyPressed[e.code] = false;
 			if (e.code && keyMap[e.code]) {
-				tones[tonesTemperment[keyMap[e.code]]].playing = false;
+				tones[tonesTemperament[keyMap[e.code]]].playing = false;
 			}
 		};
 		let bufferLength = analyser.frequencyBinCount;
@@ -408,8 +408,9 @@
 		<select bind:value={selectedMode}>
 			{#each Object.keys(modes) as mode}<option value={mode}>{mode}</option>{/each}
 		</select>
-		<select bind:value={selectedTemperment}>
-			{#each Object.keys(temperments) as temperment}<option value={temperment}>{temperment}</option
+		<select bind:value={selectedTemperament}>
+			{#each Object.keys(temperaments) as temperament}<option value={temperament}
+					>{temperament}</option
 				>{/each}
 		</select>
 
@@ -420,7 +421,7 @@
 		</div>
 	</div>
 	<div class="tone-button-container">
-		{#each Object.values(tonesTemperment) as t}
+		{#each Object.values(tonesTemperament) as t}
 			{@const name = tones[t].name + tones[t].octave}
 			<input type="checkbox" bind:checked={tones[t].playing} />
 			<div class="tone-button">{name}</div>
@@ -434,13 +435,13 @@
 	</div>
 	<!-- <div class="tone-grid">
 		{#each Object.values(keyMap) as noteName}
-			{#if tonesTemperment[noteName]}
+			{#if tonesTemperament[noteName]}
 				<div>
-					{tones[tonesTemperment[noteName]].name}
-					<input type="checkbox" bind:checked={tones[tonesTemperment[noteName]].playing} />
+					{tones[tonesTemperament[noteName]].name}
+					<input type="checkbox" bind:checked={tones[tonesTemperament[noteName]].playing} />
 					<input
 						type="number"
-						bind:value={tones[tonesTemperment[noteName]].o.frequency.value}
+						bind:value={tones[tonesTemperament[noteName]].o.frequency.value}
 						min="0"
 						max="7040"
 						step="any"
